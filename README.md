@@ -10,7 +10,14 @@ Equalizador simples para o Windows, com motor de som próprio. Fica no canto da 
 - `motor\`: o motor de som (`timbro_apo.dll`, C++). É um APO, o tipo de plugin que o próprio Windows carrega no caminho do som de cada aparelho. Faz 10 faixas de equalização e baixa o volume na medida certa para não distorcer.
 - `motor\teste_motor.exe`: testa os filtros e o motor fora do áudio do Windows.
 
-## Instalar
+## Baixar pronto
+
+1. Desinstale o FxSound e o Equalizer APO, se estiverem no PC. Eles disputam o mesmo encaixe.
+2. Baixe o `Timbro-<versão>.zip` em [Releases](https://github.com/caiquebmaso/timbro/releases/latest) e extraia numa pasta fixa (ex.: `C:\Programas\Timbro`). O `timbro.exe` e o `timbro_apo.dll` precisam ficar juntos.
+3. Abra o `timbro.exe`. O Windows pode mostrar "O Windows protegeu o computador", porque o programa não tem assinatura digital paga: clique em "Mais informações" e "Executar assim mesmo".
+4. Siga do passo 3 de "Instalar" abaixo.
+
+## Instalar compilando
 
 1. Desinstale o FxSound e o Equalizer APO, se estiverem no PC. Eles disputam o mesmo encaixe.
 2. Rode `timbro.bat`. Na primeira vez ele compila o motor (precisa das Ferramentas de Build do Visual Studio com C++) e o Timbro.

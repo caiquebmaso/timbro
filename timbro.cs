@@ -16,7 +16,9 @@ using Microsoft.Win32;
 
 [assembly: System.Reflection.AssemblyTitle("Timbro")]
 [assembly: System.Reflection.AssemblyProduct("Timbro")]
-[assembly: System.Reflection.AssemblyVersion("0.1.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyDescription("Equalizador para Windows com motor de som próprio")]
 
 namespace Timbro
 {
