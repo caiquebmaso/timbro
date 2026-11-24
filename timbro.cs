@@ -1468,6 +1468,16 @@ namespace Timbro
         }
 
         [STAThread]
+        public static void AnotarErro(string onde, Exception e)
+        {
+            try
+            {
+                Directory.CreateDirectory(Config.Pasta);
+                File.AppendAllText(Path.Combine(Config.Pasta, "erros.log"), DateTime.Now + " [" + onde + "] " + e + "\r\n\r\n");
+            }
+            catch { }
+        }
+
         static void Main(string[] args)
         {
             // Tarefas de administrador (o próprio Timbro se chama com "runas").
@@ -1558,6 +1568,10 @@ namespace Timbro
             var evento = new EventWaitHandle(false, EventResetMode.AutoReset, "Timbro-mostrar");
             if (!novo) { evento.Set(); return; }
 
+            // Qualquer erro fica em %LOCALAPPDATA%\Timbro\erros.log.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += (s, e) => AnotarErro("tela", e.Exception);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => AnotarErro("fatal", e.ExceptionObject as Exception);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var janela = new Janela(Config.Carregar(), args.Contains("--oculto"));
