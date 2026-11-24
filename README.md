@@ -8,12 +8,13 @@ Precisa de Windows 10 ou 11 de 64 bits. O .NET que ele usa já vem no Windows.
 
 ## Instalar
 
-1. Desinstale o FxSound e o Equalizer APO, se estiverem no PC. Eles disputam o mesmo encaixe no som.
-2. Baixe o `Timbro-<versão>.zip` em [Releases](https://github.com/caiquebmaso/timbro/releases/latest) e extraia numa pasta fixa (ex.: `C:\Programas\Timbro`). O `timbro.exe` e o `timbro_apo.dll` precisam ficar juntos.
-3. Abra o `timbro.exe`. O Windows pode mostrar "O Windows protegeu o computador", porque o programa não tem assinatura digital paga: clique em "Mais informações" e "Executar assim mesmo".
-4. Escolha o aparelho na lista e clique em "Instalar neste aparelho", embaixo à direita. O Windows pede administrador; o som para por uns segundos e volta.
-5. Toque uma música. A linha de baixo passa a mostrar "Motor rodando".
-6. Clique com o botão direito no ícone perto do relógio e marque "Iniciar com o Windows".
+1. Baixe o `Timbro-<versão>.zip` em [Releases](https://github.com/caiquebmaso/timbro/releases/latest) e extraia numa pasta fixa (ex.: `C:\Programas\Timbro`). O `timbro.exe` e o `timbro_apo.dll` precisam ficar juntos.
+2. Abra o `timbro.exe`. O Windows pode mostrar "O Windows protegeu o computador", porque o programa não tem assinatura digital paga: clique em "Mais informações" e "Executar assim mesmo".
+3. Escolha o aparelho na lista e clique em "Instalar neste aparelho", embaixo à direita. O Windows pede administrador; o som para por uns segundos e volta.
+4. Toque uma música. A linha de baixo passa a mostrar "Motor rodando".
+5. Clique com o botão direito no ícone perto do relógio e marque "Iniciar com o Windows".
+
+Se você já usa outro equalizador que age no som do Windows inteiro, desligue ou desinstale ele antes. Dois equalizadores no mesmo aparelho equalizam o som duas vezes ou disputam o mesmo encaixe.
 
 Quer compilar em vez de baixar? Veja [Compilar](#compilar).
 
@@ -65,7 +66,7 @@ Tudo o que é feito como administrador fica registrado em `%LOCALAPPDATA%\Timbro
 Precisa das Ferramentas de Build do Visual Studio com C++ (para o motor).
 
 1. Rode `timbro.bat`. Na primeira vez ele compila o motor (`motor\compilar.bat`) e o Timbro em `%LOCALAPPDATA%\Timbro` e abre o programa.
-2. Siga do passo 4 de [Instalar](#instalar).
+2. Siga do passo 3 de [Instalar](#instalar).
 
 ### Peças
 
