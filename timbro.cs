@@ -451,18 +451,41 @@ namespace Timbro
             }
         }
 
-        static void DevolverPermissao(string caminho, RegistryKey copia, string nome)
+        // Devolve as permissões guardadas. Primeiro a lista de acesso, depois o dono, cada um por si:
+        // uma falha fica no log e não impede o resto da remoção.
+        static void DevolverPermissao(string caminho, RegistryKey copia, string nome, StringBuilder log)
         {
             string sddl = copia.GetValue("sddl|" + nome) as string;
             if (sddl == null) return;
-            using (var k = Hklm.OpenSubKey(caminho, RegistryKeyPermissionCheck.ReadWriteSubTree,
-                System.Security.AccessControl.RegistryRights.ChangePermissions | System.Security.AccessControl.RegistryRights.TakeOwnership))
+            // A regra que o instalador põe nunca é "original", e as chaves de áudio são do sistema.
+            sddl = sddl.Replace("(A;CI;KA;;;BA)", "");
+            if (sddl.StartsWith("O:BA")) sddl = "O:SY" + sddl.Substring(4);
+            var s = new System.Security.AccessControl.RegistrySecurity();
+            s.SetSecurityDescriptorSddlForm(sddl, Secoes);
+            try
             {
-                if (k == null) return;
-                var s = new System.Security.AccessControl.RegistrySecurity();
-                s.SetSecurityDescriptorSddlForm(sddl, Secoes);
-                k.SetAccessControl(s);
+                using (var k = Hklm.OpenSubKey(caminho, RegistryKeyPermissionCheck.ReadWriteSubTree,
+                    System.Security.AccessControl.RegistryRights.ChangePermissions | System.Security.AccessControl.RegistryRights.ReadPermissions))
+                {
+                    if (k == null) return;
+                    var acesso = new System.Security.AccessControl.RegistrySecurity();
+                    acesso.SetSecurityDescriptorSddlForm(s.GetSecurityDescriptorSddlForm(System.Security.AccessControl.AccessControlSections.Access),
+                        System.Security.AccessControl.AccessControlSections.Access);
+                    k.SetAccessControl(acesso);
+                }
             }
+            catch (Exception e) { log.AppendLine("permissões de " + nome + ": " + e.Message); }
+            try
+            {
+                using (var k = Hklm.OpenSubKey(caminho, RegistryKeyPermissionCheck.ReadWriteSubTree, System.Security.AccessControl.RegistryRights.TakeOwnership))
+                {
+                    if (k == null) return;
+                    var dono = new System.Security.AccessControl.RegistrySecurity();
+                    dono.SetOwner(s.GetOwner(typeof(System.Security.Principal.SecurityIdentifier)));
+                    k.SetAccessControl(dono);
+                }
+            }
+            catch (Exception e) { log.AppendLine("dono de " + nome + ": " + e.Message); }
         }
 
         static void GuardarValor(RegistryKey origem, string valor, RegistryKey copia, string prefixo)
@@ -616,9 +639,10 @@ namespace Timbro
                     using (var d = Hklm.OpenSubKey(dispositivo, true)) if (d != null) d.DeleteSubKeyTree("FxProperties", false);
                 using (var p = Hklm.OpenSubKey(dispositivo + "\\Properties", true))
                     if (p != null && copia.GetValueNames().Any(n => n.StartsWith("props|"))) DevolverValor(p, SysFx, copia, "props");
-                DevolverPermissao(dispositivo + "\\Properties", copia, "props");
-                DevolverPermissao(dispositivo + "\\FxProperties", copia, "fx");
-                DevolverPermissao(dispositivo, copia, "dispositivo");
+                // De cima para baixo: as chaves de dentro herdam da de cima.
+                DevolverPermissao(dispositivo, copia, "dispositivo", log);
+                DevolverPermissao(dispositivo + "\\FxProperties", copia, "fx", log);
+                DevolverPermissao(dispositivo + "\\Properties", copia, "props", log);
             }
             using (var c = Hklm.OpenSubKey(Copia, true)) if (c != null) c.DeleteSubKeyTree(guid, false);
             log.AppendLine("devolveu o aparelho " + guid + " como era");
