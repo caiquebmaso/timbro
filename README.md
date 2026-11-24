@@ -1,6 +1,6 @@
 # Timbro
 
-![Timbro](docs/tela.png)
+![Timbro](docs/timbro.png)
 
 Equalizador simples para o Windows, com motor de som próprio. Fica no canto da barra de tarefas, guarda um ajuste para cada fone ou caixa e pode prender o som numa saída.
 
