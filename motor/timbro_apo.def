@@ -1,0 +1,4 @@
+LIBRARY timbro_apo
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

@@ -1,0 +1,7 @@
+motor/bin/
+*.exe
+*.dll
+*.obj
+*.lib
+*.exp
+*.pdb
